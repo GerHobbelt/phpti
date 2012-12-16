@@ -4,7 +4,11 @@ VER_SED = sed s/@VERSION/"${VER}"/
 DATE = `git log -1 | grep Date: | sed 's/[^:]*: *//'`
 DATE_SED = sed s/@DATE/"${DATE}"/
 
-zip:
+.PHONY: build tests zip clean
+
+zip: build tests
+
+build:	
 	@rm -rf build/*
 	
 	@echo "building..."
@@ -17,7 +21,8 @@ zip:
 		> build/ti.php
 	@cp readme.mkd build/readme.txt
 	@cp license.txt build
-	
+
+tests: build	
 	@echo "running tests..."
 	@if tests/run-tests -B; then \
 		echo "zipping..."; \
